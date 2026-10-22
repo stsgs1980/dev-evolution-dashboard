@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Гейты перед пушем: типы и тесты
+npm run typecheck
+npm test
