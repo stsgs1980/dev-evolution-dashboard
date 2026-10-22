@@ -6,8 +6,19 @@
     ]
   },
   "dependencies": {
+    "@internationalized/date": "^3.12.4",
+    "@react-stately/utils": "^3.12.1",
+    "@untitledui/file-icons": "^0.0.9",
+    "@untitledui/icons": "^0.0.23",
+    "input-otp": "^1.5.0",
     "react": "^19.2.8",
-    "react-dom": "^19.3.0"
+    "react-aria": "^3.53.1",
+    "react-aria-components": "^1.22.1",
+    "react-dom": "^19.3.0",
+    "react-stately": "^3.51.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-react-aria-components": "^2.2.0"
   },
   "description": "Personal GitHub evolution dashboard: eras, DMI and craft metrics from a committed snapshot",
   "devDependencies": {
@@ -17,6 +28,7 @@
     "@eslint/markdown": "8.0.3",
     "@next/eslint-plugin-next": "^16.4.2",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^24.19.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.3.0",

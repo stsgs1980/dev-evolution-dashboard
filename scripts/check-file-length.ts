@@ -10,6 +10,13 @@ const TEST_FILE = /\.(test|spec)\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/;
 /** Everything under tests/ or __tests__/ is test support code. */
 const TEST_DIR = /(?:^|[\\/])(?:__tests__|tests?)[\\/]/;
 
+/**
+ * Vendor trees are exempt: third-party shipped code is not split by this repo's
+ * style gates. Project code keeps the full limit (see
+ * .superpowers/decisions/002-vendor-scope.md).
+ */
+const SKIP_PREFIXES = ["src/vendor/"];
+
 const args = process.argv.slice(2);
 const checkAll = args.includes("--all");
 const maxLinesArg = args.find((arg) => arg.startsWith("--max-lines="));
@@ -51,22 +58,23 @@ function listFiles(): string[] {
 }
 
 /**
- * Whether test code is exempt from the anti-monolith limit.
+ * Whether a file is exempt from this gate: test files and vendor skip-prefixes.
  * @param file - repository-relative path
- * @returns true for *.test.* and *.spec.* files and tests/ or __tests__/ trees
+ * @returns true for *.test.* and *.spec.* files, tests/ or __tests__/ trees and vendor prefixes
  */
-function isTestFile(file: string): boolean {
-  return TEST_FILE.test(file) || TEST_DIR.test(file);
+function isSkipped(file: string): boolean {
+  return TEST_FILE.test(file) || TEST_DIR.test(file) || SKIP_PREFIXES.some((prefix) => file.startsWith(prefix));
 }
 
 /**
  * Anti-monolith check: TS/JS source files must not exceed MAX_LINES.
- * Test files (*.test.*, *.spec.*, tests/, __tests__/) are exempt.
+ * Test files (*.test.*, *.spec.*, tests/, __tests__/) and vendor trees (SKIP_PREFIXES)
+ * are exempt.
  * @returns {void}
  */
 function main(): void {
   const candidates = listFiles();
-  const files = candidates.filter((file) => !isTestFile(file));
+  const files = candidates.filter((file) => !isSkipped(file));
   const skippedTests = candidates.length - files.length;
 
   let failed = 0;

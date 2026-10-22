@@ -48,6 +48,10 @@ export default [
       ".idea/**",
       // Agent workspace (superpowers briefs/ledger; never present in CI).
       ".superpowers/**",
+      // Vendor copy of Untitled UI (see .superpowers/decisions/002-vendor-scope.md):
+      // shipped third-party code keeps its own style; gates stay full-strength
+      // everywhere else.
+      "src/vendor/untitled-ui/**",
     ],
   },
   ...markdown.configs.recommended,
