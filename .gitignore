@@ -46,6 +46,9 @@ coverage/
 # OpenCode
 .agents/
 
+# Agent workspace (superpowers briefs/ledger; never present in CI)
+.superpowers/
+
 # OS files
 .DS_Store
 Thumbs.db
