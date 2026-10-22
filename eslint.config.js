@@ -5,6 +5,8 @@ import markdown from "@eslint/markdown";
 // noinspection NpmUsedModulesInstalled
 import tsParser from "@typescript-eslint/parser";
 // noinspection NpmUsedModulesInstalled
+import nextPluginModule from "@next/eslint-plugin-next";
+// noinspection NpmUsedModulesInstalled
 import jsdoc from "eslint-plugin-jsdoc";
 // noinspection NpmUsedModulesInstalled
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -17,6 +19,15 @@ import tseslint from "typescript-eslint";
 import plainTextParser from "./eslint-parsers/plain-text.js";
 import markdownSnippetsProcessor from "./eslint-processors/markdown-snippets.js";
 import unicodePolicy from "./eslint-rules/unicode-policy.js";
+
+/** CJS interop: the plugin ships module.exports with `configs` and `rules` keys. */
+const nextPlugin = nextPluginModule.default ?? nextPluginModule;
+
+/** Next.js rules from recommended + core-web-vitals presets. */
+const nextRules = {
+  ...nextPlugin.configs.recommended.rules,
+  ...nextPlugin.configs["core-web-vitals"].rules,
+};
 
 export default [
   {
@@ -85,11 +96,13 @@ export default [
       "react-hooks": reactHooks,
       "jsx-a11y": jsxA11y,
       "unicode-policy": unicodePolicy,
+      "@next/next": nextPlugin,
     },
     settings: {
       react: { version: "detect" },
     },
     rules: {
+      ...nextRules,
       "unicode-policy/emoji": "error",
       "unicode-policy/unicode-graphics": "error",
       "no-irregular-whitespace": "error",

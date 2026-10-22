@@ -1,9 +1,12 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src", "**/*.ts", "**/*.tsx"]
+  "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
