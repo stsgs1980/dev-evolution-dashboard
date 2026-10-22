@@ -9,7 +9,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.3.0"
   },
-  "description": "WebStorm template with ESLint, Prettier, Stylelint, markdownlint, TypeScript, Husky, and AI rules",
+  "description": "Personal GitHub evolution dashboard: eras, DMI and craft metrics from a committed snapshot",
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.0",
@@ -41,12 +41,12 @@
     "vitest": "^5.0.4"
   },
   "keywords": [
-    "webstorm",
-    "eslint",
-    "prettier",
-    "typescript",
-    "husky",
-    "template"
+    "dashboard",
+    "github",
+    "analytics",
+    "nextjs",
+    "react-aria",
+    "untitled-ui"
   ],
   "license": "MIT",
   "lint-staged": {
@@ -55,7 +55,7 @@
     "*.{css,scss}": "stylelint --fix",
     "*.md": "markdownlint --fix --ignore node_modules"
   },
-  "name": "webstorm-config",
+  "name": "dev-evolution-dashboard",
   "scripts": {
     "lint": "eslint . --max-warnings=0",
     "lint:css": "stylelint \"**/*.{css,scss}\" --allow-empty-input",
@@ -81,5 +81,5 @@
     "smol-toml": "^1.9.1",
     "js-yaml": "^5.4.3"
   },
-  "version": "1.0.0"
+  "version": "0.1.0"
 }

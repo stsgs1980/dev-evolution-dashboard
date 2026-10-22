@@ -1,116 +1,128 @@
-# webstorm-config
+# dev-evolution-dashboard
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![CI][ci-badge]][ci-workflow]
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.22.2-brightgreen.svg)](https://nodejs.org/)
-[![WebStorm](https://img.shields.io/badge/WebStorm-2026.2-orange.svg)](https://www.jetbrains.com/webstorm/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescript.org/)
 
-Репозиторий-**шаблон** настроек для WebStorm: ESLint, Prettier, Stylelint, Vitest, Husky, AI rules.
+> **Status**: ACTIVE
+> **Last Updated**: 2026-10-22
 
-## Этот README vs README.template.md
+## Overview
 
-| Файл                        | Назначение                                                      |
-| --------------------------- | --------------------------------------------------------------- |
-| **README.md** (этот файл)   | Документация репозитория `webstorm-config` на GitHub            |
-| **README.template.md**      | Копируется в **ваш** проект как `README.md` после fork (Step 1) |
-| **docs/getting-started.md** | Шаги после fork — остаётся в проекте, не переписывается         |
+Персональный аналитический дашборд, который по истории GitHub-аккаунта восстанавливает
+траекторию профессионального развития: точками перелома, фазами активности и практики
+инженерного ремесла. Дашборд оценивает артефакты (коммиты, конфиги, тесты), а не
+человека: любая интерпретация подписана как эвристика с раскрытой формулой на
+`/methodology`.
 
-## Что есть в шаблоне (и чего нет)
+Данные собираются офлайн-скриптом один раз и коммитятся в репозиторий как JSON-снапшот;
+приложение работает без сети, детерминированно и без запросов к GitHub из браузера.
 
-> **Шаблон настроек, не приложение:** нет `src/`, нет `npm run dev` до Steps 2–4 в
-> [docs/getting-started.md](docs/getting-started.md).
+## Table of Contents
 
-| Есть сразу после `npm install`  | Нет до настройки проекта |
-| ------------------------------- | ------------------------ |
-| Линтеры, Prettier, Husky        | `src/`, UI-код           |
-| Vitest (`passWithNoTests`)      | `npm run dev` / сборщик  |
-| `react` в deps (для ESLint/TSX) | Vite / Next (Step 2)     |
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Scripts](#scripts)
+- [Docs](#docs)
+- [Architecture](#architecture)
+- [Conventions](#conventions)
+- [License](#license)
 
-`react` и `react-dom` в `dependencies` — **для линтинга и TypeScript (JSX)**, не для запуска
-приложения. Сборщик добавляете на Step 2. Проект без React: удалите их и поправьте
-`tsconfig.json` (`jsx`) и `eslint.config.js` (React-правила) — детали в Step 2
-[getting-started](docs/getting-started.md).
+## Features
 
-## Quick Start (создать проект из шаблона)
+- Детекция фаз активности: кластеризация истории по месяцам с фиксированным сидом.
+- Индекс зрелости DMI: составная оценка 0-100 с раскрытыми весами компонентов.
+- Эволюция стека: динамика языков, Gantt технологий, breadth vs depth.
+- Портфель репозиториев: таблица со статусами, спарклайны, drill-down по репо.
+- Ремесло: атомарность коммитов, conventional ratio, тесты, микс типов.
+- Инсайты: детерминированные правила с числами-доказательствами, без LLM.
+- Тёмная и светлая темы, реордер виджетов, фильтры периода в URL.
 
-После любого Option выполните обязательные шаги из [After fork](#after-fork-кратко).
+## Tech Stack
 
-### Option 1: GitHub Template (recommended)
+- **Language**: TypeScript strict
+- **Framework**: Next.js (App Router) + React 19
+- **Design system**: Untitled UI React (free tier) на **React Aria Components**
+- **Styling**: Tailwind CSS v4 (тема в CSS через `@theme`, без tailwind.config)
+- **Charts**: Tremor raw, перетемлённый на токены Untitled UI
+- **Testing**: Vitest
+- **Quality**: ESLint, Stylelint, markdownlint, Prettier, Husky, Commitlint (из шаблона)
+
+Один primitive-слой: React Aria. shadcn/ui, Base UI и Radix не подключаются даже как
+зависимости; решение зафиксировано в `docs/superpowers/specs/ui-ecosystem.decision.md`.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 22.22.2 (в локальной среде - 24.15.0 из `.nvmrc`)
+- npm >= 10.9.0 (`engine-strict` включён)
+
+Pre-commit останавливается на первой ошибке: сначала `lint-staged`, затем проверка
+длины файлов. Pre-push прогоняет `npm run typecheck` и `npm test`.
+
+### Installation
 
 ```bash
-gh repo create my-project --template stsgs1980/webstorm-config --clone
-cd my-project
 npm install
+npm run dev
 ```
 
-### Option 2: `degit` (no git history)
+Снапшот данных коммитится в `data/snapshot/`; приложение работает без сети.
 
-```bash
-npx degit stsgs1980/webstorm-config my-project
-cd my-project
-npm install
+## Scripts
+
+| Команда                 | Описание                    |
+| ----------------------- | --------------------------- |
+| `npm run dev`           | Next.js dev-сервер          |
+| `npm run build`         | Production сборка           |
+| `npm start`             | Production сервер           |
+| `npm run lint`          | ESLint                      |
+| `npm run typecheck`     | TypeScript (`tsc --noEmit`) |
+| `npm run lint:css`      | Stylelint                   |
+| `npm run lint:md`       | markdownlint                |
+| `npm run format`        | Prettier (запись)           |
+| `npm run format:check`  | Prettier (проверка)         |
+| `npm test`              | Vitest                      |
+| `npm run test:watch`    | Vitest (watch)              |
+| `npm run test:coverage` | Vitest + coverage           |
+| `npm run check:docs`    | Сверка доков с конфигами    |
+
+## Docs
+
+| Документ                                      | О чём                                 |
+| --------------------------------------------- | ------------------------------------- |
+| [getting-started.md](docs/getting-started.md) | Фреймворк, `src/`, Tailwind, проверка |
+| [webstorm.md](docs/webstorm.md)               | Настройка WebStorm                    |
+| [testing.md](docs/testing.md)                 | Vitest, `jsdom`, Testing Library      |
+| [markdown.md](docs/markdown.md)               | Правила оформления `.md`              |
+| `docs/superpowers/specs/`                     | Спека метрик, решение по UI-тестеку   |
+| `docs/superpowers/plans/`                     | План фаз 0-11                         |
+
+## Architecture
+
+```text
+[ GitHub API + git ]  ->  data/snapshot/*.json  ->  shared/metrics (pure TS)  ->  UI
+     (offline)              (committed)               (tested, no side effects)
 ```
 
-### Option 3: Manual clone
+Три слоя по спеке `docs/superpowers/specs/dev-evolution-dashboard.spec.md`:
 
-```bash
-git clone https://github.com/stsgs1980/webstorm-config my-project
-cd my-project
-rm -rf .git
-git init
-npm install
-```
-
-### Package managers
-
-| Manager | Install        | Lock file           |
-| ------- | -------------- | ------------------- |
-| npm     | `npm install`  | `package-lock.json` |
-| pnpm    | `pnpm install` | `pnpm-lock.yaml`    |
-| Bun     | `bun install`  | `bun.lockb`         |
-
-## What's Included
-
-| Tool             | Config                                      |
-| ---------------- | ------------------------------------------- |
-| **ESLint**       | `eslint.config.js` — TS/JS/JSX, React, a11y |
-| **Stylelint**    | `.stylelintrc.json` — Tailwind v4 at-rules  |
-| **Prettier**     | `.prettierrc`, `.prettierignore`            |
-| **markdownlint** | `.markdownlint.json`                        |
-| **TypeScript**   | `tsconfig.json` (strict)                    |
-| **Git hooks**    | Husky + lint-staged                         |
-| **Commitlint**   | Conventional Commits                        |
-| **EditorConfig** | `.editorconfig`                             |
-| **WebStorm**     | `.idea/` — code style, ESLint, templates    |
-| **AI Rules**     | `.aiassistant/rules/AI Rules.md`            |
-| **Testing**      | Vitest — `vitest.config.ts`                 |
-| **Security**     | `SECURITY.md` — политика уязвимостей        |
-
-**Docs (едут в fork):** [getting-started](docs/getting-started.md),
-[kickoff](docs/kickoff.md), [WebStorm](docs/webstorm.md), [testing](docs/testing.md),
-[markdown](docs/markdown.md), [live templates](docs/live-templates/README.md).
-
-## After fork (кратко)
-
-1. Обновите `package.json`: `name`, `description`.
-2. `README.template.md` -> `README.md`, заполнить Overview / Features / Architecture.
-3. Удалить `CHANGELOG.md` (история шаблона, не вашего проекта):
-
-   ```bash
-   rm CHANGELOG.md && git add CHANGELOG.md && git commit -m "chore: reset changelog for new project"
-   ```
-
-4. WebStorm — [docs/webstorm.md](docs/webstorm.md).
-5. Фреймворк, `src/`, скрипты — [docs/getting-started.md](docs/getting-started.md) (Steps 2–5).
+- `scripts/` - сбор данных; единственное место с сетевым доступом к GitHub.
+- `src/shared/` - метрики (`shared/metrics`) и модели (`shared/models`), чистые функции.
+- `src/features/` и `src/app/` - экраны; чтение только снапшота, ноль сетевых вызовов.
 
 ## Conventions
 
-См. `.aiassistant/rules/AI Rules.md`: JSDoc, strict TS, 120 chars, Conventional Commits,
-anti-monolith (250 lines; test files are exempt).
+Стиль кода: 2 пробела, точка с запятой, двойные кавычки, trailing commas, JSDoc для
+публичного API, `const`/`let`. Anti-monolith: 250 строк на файл, 200 на компонент,
+50 на функцию, 3+ `useState` -> кастомный хук. См. `.aiassistant/rules/AI Rules.md`.
 
 ## License
 
 MIT
 
-[ci-badge]: https://github.com/stsgs1980/webstorm-config/actions/workflows/ci.yml/badge.svg
-[ci-workflow]: https://github.com/stsgs1980/webstorm-config/actions/workflows/ci.yml
+[ci-badge]: https://github.com/stsgs1980/dev-evolution-dashboard/actions/workflows/ci.yml/badge.svg
+[ci-workflow]: https://github.com/stsgs1980/dev-evolution-dashboard/actions/workflows/ci.yml
