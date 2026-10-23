@@ -19,6 +19,10 @@ updates:
       # TypeScript 6+ is blocked by typescript-eslint.
       - dependency-name: typescript
         update-types: ["version-update:semver-major"]
+      # @eslint/js 10 pairs with ESLint 10; bump the two together in one
+      # coordinated change, not through a stray Dependabot PR.
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
       # Newer majors require a newer Node than engines allows.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
