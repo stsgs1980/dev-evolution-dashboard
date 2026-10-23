@@ -1,0 +1,7 @@
+{
+  "name": "legacy-app",
+  "version": "0.1.0",
+  "dependencies": {
+    "react": "^17.0.0"
+  }
+}

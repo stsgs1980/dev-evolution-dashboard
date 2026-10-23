@@ -1,0 +1,16 @@
+{
+  "name": "legacy-app",
+  "version": "0.2.0",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "vitest": "^1.0.0"
+  }
+}
