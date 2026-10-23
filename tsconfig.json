@@ -3,6 +3,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "allowImportingTsExtensions": true,
     "types": ["vitest/globals"],
     "paths": {
       "@/*": ["./src/*"]
